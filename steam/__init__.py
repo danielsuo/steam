@@ -1,6 +1,6 @@
 import os
 import csv
-import math
+import numpy as np
 import pandas as pd
 
 path = os.path.dirname(os.path.abspath(__file__))
@@ -21,12 +21,12 @@ R = 0.46151805
 
 # Ideal gas
 def phi_0(delta, tau):
-    result = math.log(delta) + table1["n^o"][
-        0] + table1["n^o"][1] * tau + table1["n^o"][2] * math.log(tau)
+    result = np.log(delta) + table1["n^o"][
+        0] + table1["n^o"][1] * tau + table1["n^o"][2] * np.log(tau)
 
     for i in range(3, 8):
-        result += table1["n^o"][i] * math.log(
-            1 - math.exp(-table1["gamma^o"][i] * tau))
+        result += table1["n^o"][i] * np.log(
+            1 - np.exp(-table1["gamma^o"][i] * tau))
 
     return result
 
@@ -36,28 +36,28 @@ def phi_r(delta, tau):
     result = 0
 
     for i in range(0, 7):
-        result += table2.n[i] * math.pow(delta, table2.d[i]) * math.pow(
+        result += table2.n[i] * np.power(delta, table2.d[i]) * np.power(
             tau, table2.t[i])
 
     for i in range(7, 51):
         # TODO: gamma?
-        result += table2.n[i] * math.pow(delta, table2.d[i]) * math.pow(
-            tau, table2.t[i]) * math.exp(-math.pow(delta, table2.c[i]))
+        result += table2.n[i] * np.power(delta, table2.d[i]) * np.power(
+            tau, table2.t[i]) * np.exp(-np.power(delta, table2.c[i]))
 
     for i in range(51, 54):
-        result += table2.n[i] * math.pow(delta, table2.d[i]) * math.pow(
-            tau, table2.t[i]) * math.exp(
-                -table2.alpha[i] * math.pow(delta - table2.epsilon[i], 2) -
-                table2.beta[i] * math.pow(tau - table2.gamma[i], 2))
+        result += table2.n[i] * np.power(delta, table2.d[i]) * np.power(
+            tau, table2.t[i]) * np.exp(
+                -table2.alpha[i] * np.power(delta - table2.epsilon[i], 2) -
+                table2.beta[i] * np.power(tau - table2.gamma[i], 2))
 
     for i in range(54, 56):
-        psi = math.exp(-table2.C[i] * math.pow(delta - 1, 2) -
-                       table2.D[i] * math.pow(tau - 1, 2))
-        theta = (1 - tau) + table2.A[i] * math.pow(math.pow(delta - 1, 2),
+        psi = np.exp(-table2.C[i] * np.power(delta - 1, 2) -
+                       table2.D[i] * np.power(tau - 1, 2))
+        theta = (1 - tau) + table2.A[i] * np.power(np.power(delta - 1, 2),
                                                    (1 / (2 * table2.beta[i])))
-        Delta = math.pow(theta, 2) + table2.B[i] * math.pow(
-            math.pow(delta - 1, 2), table2.a[i])
-        result += table2.n[i] * math.pow(Delta, table2.b[i]) * delta * psi
+        Delta = np.power(theta, 2) + table2.B[i] * np.power(
+            np.power(delta - 1, 2), table2.a[i])
+        result += table2.n[i] * np.power(Delta, table2.b[i]) * delta * psi
 
     return result
 
