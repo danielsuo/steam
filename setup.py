@@ -6,7 +6,11 @@ setup(
         "numpy",
         "scipy",
         "scikit-learn",
-        "pandas"
+        "pandas",
+        "matplotlib",
+        "jupyter",
+        "jax",
+        "jaxlib"
     ],
     python_requires=">=3.5",
     packages=find_packages()
